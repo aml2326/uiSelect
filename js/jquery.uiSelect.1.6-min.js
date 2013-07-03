@@ -1,0 +1,12 @@
+/*
+ * jQuery uiSelect Plugin
+ * http://www.adamleder.com/sandbox/jquery.uiSelect.1.6/
+ *
+ * Copyright (c) 2010 Adam Leder
+ * Dual licensed under the MIT and GPL licenses.
+ * Uses the same license as jQuery, see:
+ * http://docs.jquery.com/License
+ *
+ * @version 1.6
+ */
+(function($){$.fn.extend({uiSelect:function(options,menuID,inputID){var $thisSelect = $(this);var $uiValue;if ($thisSelect.find('option:selected').length){$uiValue = $thisSelect.find('option:selected').text();}else{$uiValue = "";}var uiInputStyle={"z-index":1};var defaults={leftOffset:0,topOffset:0,addRequired:false,requiredClass:'required'};var options=$.extend(defaults,options);var uiMenu=$("<div/>",{id:menuID,"class":"uiSelect",css:{position:"absolute",display:"none",zIndex:1000}});var uiInput=$("<input/>",{id:inputID,'class':'uiInput'+(options.addRequired == true ? ' '+options.requiredClass : ''),name:inputID,css:{position:"relative"},value: $uiValue});var uiOptionMenu=$("<ul/>",{"class":"uiOptionMenu",css:{position:"relative"}});return this.each(function(){var obj=$(this).attr("id");var o=options;var optionTexts=[];var menu=$("#"+obj+" option").each(function(){optionTexts.push($(this).text());});$("#"+obj).after(uiInput);$("#"+inputID).after(uiMenu);$("#"+menuID).append(uiOptionMenu);$("#"+obj+" option").each(function(){var uiOption=$('<li><a href="#">'+$(this).text()+"</a></li>");$("#"+menuID+" .uiOptionMenu").append(uiOption);});$("#"+obj).css("display","none");$("#"+inputID).css(uiInputStyle).click(function(){$("div.uiSelect").not("#"+menuID).slideUp("fast");var position=$(this).position();var uiHeight=parseInt($(this).css("height"))+10;if(o.topOffset==0){uiHeight=uiHeight;}else{uiHeight=uiHeight+o.topOffset;}$("#"+menuID).css({left:(position.left+o.leftOffset)+"px",top:(position.top+uiHeight)+"px"});$("#"+menuID).slideDown();return false;}).live("keydown",function(){$("#"+inputID).blur();$("#"+menuID).slideUp("fast");});$("*").live("click",function(){$("#"+menuID).slideUp("fast");});$("#"+menuID+" a").click(function(){$("#"+inputID).val($(this).text());$thisSelect.val($(this).text());$("#"+menuID).fadeOut("fast");return false;});if($.browser.msie && $.browser.version.substr(0,1)<8) {var ieV=$.browser.version.substr(0,1);var zIndexNumber = 1000;$('div').each(function() {$(this).css('zIndex', zIndexNumber);zIndexNumber -= 10;});}});}});})(jQuery);
